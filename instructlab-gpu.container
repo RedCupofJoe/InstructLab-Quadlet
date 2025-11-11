@@ -1,0 +1,67 @@
+# instructlab-gpu.container
+# Purpose: Run an InstructLab-ready GPU container on top of NVIDIA CUDA 12.6 + cuDNN on UBI9
+# Image:    nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+# Persist:  Bind-mounts a host directory into the container (/workspace)
+# Runtime:  Systemd-managed Podman Quadlet, restarted automatically on failure/boot
+
+[Unit]
+Description=InstructLab (GPU) - CUDA 12.6 cuDNN UBI9
+# Start _after_ the user session is established (rootless) and network is up
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+# --- Image selection ---
+# We pull the CUDA/cuDNN UBI9 runtime image you referenced:
+Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+
+# --- Naming and lifecycle ---
+# A stable container name helps with 'podman exec' and logs
+ContainerName=instructlab-gpu
+# Always restart to survive crashes; systemd handles backoff
+Restart=always
+
+# --- GPU / NVIDIA integration ---
+# These env vars are consumed by the NVIDIA OCI hook (provided by nvidia-container-toolkit)
+# to inject the right libraries/devices. Make sure the toolkit is installed on the host.
+Environment=NVIDIA_VISIBLE_DEVICES=all
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+# If you use SELinux (Fedora/RHEL), containers can be confined. We disable the label to ease GPU device access.
+# If you prefer to keep SELinux enabled, you can instead add :z or :Z on bind mounts and configure nvidia hooks accordingly.
+SecurityLabelDisable=true
+
+# --- Workdir & persistence ---
+# Choose a host path to persist data. For rootless, the deploy script defaults to:  ~/instructlab-data
+# This bind mount is your "project root" inside the container.
+# Add :z on SELinux hosts to label the path for container sharing (the deploy script will do this automatically).
+Volume=%h/instructlab-data:/workspace
+
+# Cache directory to persist pip/wheels/model caches across restarts (optional but recommended).
+Volume=%h/instructlab-data/.cache:/root/.cache
+
+# --- Networking ---
+# Uncomment and adjust if you plan to expose any InstructLab service/ports later.
+# PublishPort=8080:8080/tcp
+
+# --- User/Workdir ---
+# Work inside /workspace so 'podman exec -it instructlab-gpu bash' lands you in the project.
+WorkingDir=/workspace
+
+# --- Entry command ---
+# Keep the container "up" so you can exec into it anytime (you can swap this for a launcher script later).
+# Using bash -lc allows profile scripts/conda etc. if you add them later.
+Command=/bin/bash -lc "sleep infinity"
+
+# --- Logging ---
+# Keep logs accessible via 'journalctl --user -u instructlab-gpu.service' (rootless)
+# and 'podman logs instructlab-gpu'.
+# (Quadlet defaults are fine—no extra stanza needed.)
+
+[Service]
+# Give the container a little time to stop gracefully on shutdown/reload
+TimeoutStopSec=30
+
+[Install]
+# For rootless: enables on user login; for rootful: enables at system boot
+WantedBy=default.target
