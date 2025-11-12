@@ -65,7 +65,7 @@ loginctl enable-linger "${USER}"
 # --- Start service ---
 echo "[INFO] Reloading user daemon & starting '${SERVICE_NAME}'"
 systemctl --user daemon-reload
-systemctl --user enable --now "${SERVICE_NAME}"
+systemctl --user start "${SERVICE_NAME}"
 
 echo
 echo "✅ SDG Hub UI deployed."
