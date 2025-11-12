@@ -61,6 +61,8 @@ Command=/bin/bash -lc "sleep infinity"
 [Service]
 # Give the container a little time to stop gracefully on shutdown/reload
 TimeoutStopSec=30
+# Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
+ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
 
 [Install]
 # For rootless: enables on user login; for rootful: enables at system boot
