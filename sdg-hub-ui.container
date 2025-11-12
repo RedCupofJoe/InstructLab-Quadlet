@@ -30,7 +30,7 @@ Volume=%h/instructlab-data:/workspace
 Volume=%h/instructlab-data/.cache:/root/.cache
 
 # --- UI networking: bind to localhost:8999 by default ---
-PublishPort=127.0.0.1:8999:8999/tcp
+PublishPort=127.0.0.1:8999:8888/tcp
 
 # --- Working directory for notebooks/repos ---
 WorkingDir=/workspace
