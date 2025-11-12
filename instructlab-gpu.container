@@ -12,7 +12,7 @@ Wants=network-online.target
 
 [Container]
 # --- Image selection ---
-# Pull the NVidia CUDA/cuDNN UBI9 runtime image:
+# Pull the recommended Instructlab image
 Image=ghcr.io/instructlab/instructlab:latest
 
 # --- Naming and lifecycle ---
