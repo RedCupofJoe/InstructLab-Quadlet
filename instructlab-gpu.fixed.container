@@ -12,7 +12,6 @@ Image=ghcr.io/instructlab/instructlab:latest
 
 # Stable name for exec/logs
 ContainerName=instructlab-gpu
-Restart=always
 
 # NVIDIA CDI (requires nvidia-container-toolkit + CDI or hooks)
 Environment=NVIDIA_VISIBLE_DEVICES=all
@@ -40,6 +39,9 @@ Command=/bin/bash -lc "echo 'InstructLab GPU container is up'; sleep infinity"
 [Service]
 # Give it time to stop cleanly
 TimeoutStopSec=30
+# Always restart to survive crashes; systemd handles backoff
+Restart=always
+
 # Ensure nvidia-uvm node exists before container starts
 ExecStartPre=/usr/bin/bash -lc 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
 
