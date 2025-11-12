@@ -1,0 +1,61 @@
+# sdg-hub-ui.container
+# Purpose: Run SDG Hub with a simple UI (JupyterLab) sharing the same persistent host path.
+# Image:   NVIDIA CUDA 12.6 + cuDNN on UBI9 (matches your other GPU units)
+# PV:      Binds ~/instructlab-data -> /workspace  (shared with your other quadlets)
+
+[Unit]
+Description=SDG Hub UI (JupyterLab) - CUDA 12.6 cuDNN UBI9
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+# --- Base image consistent with your stack ---
+Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+
+# --- Naming & restart policy ---
+ContainerName=sdg-hub-ui
+Restart=always
+
+# --- GPU enablement via NVIDIA OCI hooks (requires nvidia-container-toolkit on host) ---
+Environment=NVIDIA_VISIBLE_DEVICES=all
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+# --- Relax SELinux labeling to simplify GPU device access; if you prefer labels, remove this and label the PV with :z ---
+SecurityLabelDisable=true
+
+# --- Shared persistent volume (same PV as your other quadlets) ---
+# NOTE: keep this path identical across units so all share /workspace content.
+Volume=%h/instructlab-data:/workspace
+Volume=%h/instructlab-data/.cache:/root/.cache
+
+# --- UI networking: bind to localhost:8999 by default ---
+PublishPort=127.0.0.1:8999:8999/tcp
+
+# --- Working directory for notebooks/repos ---
+WorkingDir=/workspace
+
+# --- Optional env: token & default notebook dir ---
+Environment=JUPYTER_TOKEN=sdg
+Environment=JUPYTER_NOTEBOOK_DIR=/workspace
+
+# --- Command: install minimal deps, SDG Hub, and run JupyterLab ---
+# SDG Hub install ref: README / PyPI (uv/pip install sdg-hub) 
+# We keep it simple here with python+pip; swap to uv if you prefer.
+Command=/bin/bash -lc "\
+  dnf -y install python3.11 python3.11-pip git && \
+  python3.11 -m pip install --upgrade pip && \
+  python3.11 -m pip install jupyterlab sdg-hub && \
+  jupyter lab \
+    --ServerApp.token=${JUPYTER_TOKEN} \
+    --ServerApp.root_dir=${JUPYTER_NOTEBOOK_DIR} \
+    --ServerApp.allow_remote_access=1 \
+    --ServerApp.ip=0.0.0.0 \
+    --ServerApp.port=8888 \
+    --ServerApp.open_browser=False \
+"
+
+[Service]
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
