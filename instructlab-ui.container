@@ -13,7 +13,7 @@ Wants=network-online.target
 
 [Container]
 # --- Base image (matches your GPU runtime) ---
-Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+Image=ghcr.io/instructlab/instructlab:latest
 
 
 # --- Name/Lifecycle ---
@@ -21,8 +21,8 @@ ContainerName=instructlab-ui
 Restart=always
 
 # --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
-# Environment=NVIDIA_VISIBLE_DEVICES=all
-# Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+Environment=NVIDIA_VISIBLE_DEVICES=all
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
 AddDevice=nvidia.com/gpu=all
 
 # -----------------------------
@@ -81,7 +81,6 @@ Command=/bin/bash -lc "\
     --ServerApp.open_browser=False \
 "
 
-[Service]
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
