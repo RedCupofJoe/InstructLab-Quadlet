@@ -41,7 +41,7 @@ Volume=%h/instructlab-data:/workspace
 Volume=%h/instructlab-data/.cache:/root/.cache
 
 # --- Networking ---
-# Uncomment and adjust if you plan to expose any InstructLab service/ports later.
+# Uncomment and adjust if you plan to expose any InstructLab service/ports later. This should be changed to a none standard port at somepoint in the future. 
 # PublishPort=8080:8080/tcp
 
 # --- User/Workdir ---
