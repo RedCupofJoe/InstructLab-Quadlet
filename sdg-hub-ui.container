@@ -14,7 +14,7 @@ Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
 
 # --- Naming & restart policy ---
 ContainerName=sdg-hub-ui
-Restart=always
+
 
 # --- GPU enablement via NVIDIA OCI hooks (requires nvidia-container-toolkit on host) ---
 # Environment=NVIDIA_VISIBLE_DEVICES=all
@@ -79,6 +79,7 @@ Command=/bin/bash -lc "\
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
+Restart=always
 
 [Install]
 WantedBy=default.target
