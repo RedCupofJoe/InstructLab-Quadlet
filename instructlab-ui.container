@@ -1,0 +1,65 @@
+# instructlab-ui.container
+# Purpose: Run a UI for quick testing (JupyterLab) on top of the same CUDA/cuDNN UBI9 base.
+# Notes:
+#   - Shares the same persistent host directory (~/instructlab-data by default) as the GPU service.
+#   - Installs JupyterLab + InstructLab at container start (simple, flexible).
+#   - Binds JupyterLab to 0.0.0.0:8888, published to host 127.0.0.1:8888 by default (adjust below).
+#   - If you prefer Gradio/FastAPI instead, swap the Command to your launcher and change ports.
+
+[Unit]
+Description=InstructLab UI (JupyterLab) - CUDA 12.6 cuDNN UBI9
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+# --- Base image (matches your GPU runtime) ---
+Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+
+# --- Name/Lifecycle ---
+ContainerName=instructlab-ui
+Restart=always
+
+# --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
+Environment=NVIDIA_VISIBLE_DEVICES=all
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+# --- SELinux simplification for device access (optional) ---
+SecurityLabelDisable=true
+
+# --- Persisted workspace (must match your data dir on host) ---
+Volume=%h/instructlab-data:/workspace
+Volume=%h/instructlab-data/.cache:/root/.cache
+
+# --- Networking: expose UI on localhost:8888 ---
+# Bind only to loopback on host by default for safety. Remove 127.0.0.1 if you want LAN access.
+PublishPort=127.0.0.1:8888:8888/tcp
+
+# --- Working directory for notebooks/repos ---
+WorkingDir=/workspace
+
+# --- Environment for Jupyter ---
+# Provide a token to avoid open/no-auth; change this to your own value.
+Environment=JUPYTER_TOKEN=instructlab
+# Optional: default notebook dir (inside container)
+Environment=JUPYTER_NOTEBOOK_DIR=/workspace
+
+# --- Command: install minimal tools then launch JupyterLab ---
+# You can pin versions or pre-bake a custom image later; this keeps it simple for now.
+Command=/bin/bash -lc "\
+  dnf -y install python3.11 python3.11-pip git && \
+  python3.11 -m pip install --upgrade pip && \
+  python3.11 -m pip install jupyterlab instructlab && \
+  jupyter lab \
+    --ServerApp.token=${JUPYTER_TOKEN} \
+    --ServerApp.root_dir=${JUPYTER_NOTEBOOK_DIR} \
+    --ServerApp.allow_remote_access=1 \
+    --ServerApp.ip=0.0.0.0 \
+    --ServerApp.port=8888 \
+    --ServerApp.open_browser=False \
+"
+
+[Service]
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
