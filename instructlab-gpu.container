@@ -12,10 +12,8 @@ Wants=network-online.target
 
 [Container]
 # --- Image selection ---
-# We pull the CUDA/cuDNN UBI9 runtime image you referenced:
+# We pull the NVidia CUDA/cuDNN UBI9 runtime image:
 Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
-AddDevice=nvidia.com/gpu=all
-SecurityLabelDisable=true
 
 # --- Naming and lifecycle ---
 # A stable container name helps with 'podman exec' and logs
@@ -28,6 +26,7 @@ Restart=always
 # to inject the right libraries/devices. Make sure the toolkit is installed on the host.
 # Environment=NVIDIA_VISIBLE_DEVICES=all #Legacy settings 
 # Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility  #Legacy settings
+AddDevice=nvidia.com/gpu=all
 
 # If you use SELinux (Fedora/RHEL), containers can be confined. We disable the label to ease GPU device access.
 # If you prefer to keep SELinux enabled, you can instead add :z or :Z on bind mounts and configure nvidia hooks accordingly.
