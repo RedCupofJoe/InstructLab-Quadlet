@@ -17,8 +17,9 @@ ContainerName=sdg-hub-ui
 Restart=always
 
 # --- GPU enablement via NVIDIA OCI hooks (requires nvidia-container-toolkit on host) ---
-Environment=NVIDIA_VISIBLE_DEVICES=all
-Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+# Environment=NVIDIA_VISIBLE_DEVICES=all
+# Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+AddDevice=nvidia.com/gpu=all
 
 # --- Relax SELinux labeling to simplify GPU device access; if you prefer labels, remove this and label the PV with :z ---
 SecurityLabelDisable=true
