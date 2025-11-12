@@ -14,8 +14,6 @@ Wants=network-online.target
 [Container]
 # --- Base image (matches your GPU runtime) ---
 Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
-AddDevice=nvidia.com/gpu=all
-SecurityLabelDisable=true
 
 
 # --- Name/Lifecycle ---
@@ -25,6 +23,7 @@ Restart=always
 # --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
 # Environment=NVIDIA_VISIBLE_DEVICES=all
 # Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+AddDevice=nvidia.com/gpu=all
 
 # --- SELinux simplification for device access (optional) ---
 SecurityLabelDisable=true
