@@ -129,7 +129,7 @@ systemctl --user daemon-reload
 
 # Enable + start the service now.
 echo "[INFO] Enabling and starting service: ${SERVICE_NAME}"
-systemctl --user enable --now "${SERVICE_NAME}"
+systemctl --user  start "${SERVICE_NAME}"
 
 ########################################
 # -------------- DONE ------------------
