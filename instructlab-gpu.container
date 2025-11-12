@@ -78,7 +78,6 @@ Command=/bin/bash -lc "sleep infinity"
 # and 'podman logs instructlab-gpu'.
 # (Quadlet defaults are fine—no extra stanza needed.)
 
-# [Service]
 # Give the container a little time to stop gracefully on shutdown/reload
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
