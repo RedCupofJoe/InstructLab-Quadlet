@@ -25,8 +25,29 @@ Restart=always
 # Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
 AddDevice=nvidia.com/gpu=all
 
-# --- SELinux simplification for device access (optional) ---
+# -----------------------------
+# SELinux options (Fedora/RHEL)
+# -----------------------------
+# Option A) Relaxed SELinux (default)
+# - Simplest for GPU/CDI: disables the container SELinux label so /dev/nvidia* devices
+#   and bind mounts work without extra labeling.
 SecurityLabelDisable=true
+
+# Option B) Strict SELinux (keep confinement)  <-- RECOMMENDED if you want strict policy
+# - Comment OUT SecurityLabelDisable=true above
+# - Add :z (shared) or :Z (private) to your bind mounts below
+# - Ensure the host path is labeled and device use is allowed
+#
+#   Host prep (one-time):
+#     sudo setsebool -P container_use_devices=true
+#     sudo chcon -Rt container_file_t ~/instructlab-data
+#
+#   Volume lines with SELinux labels (uncomment one style):
+# Volume=%h/instructlab-data:/workspace:z       # :z = shared label (multiple containers)
+# Volume=%h/instructlab-data/.cache:/root/.cache:z
+# Volume=%h/instructlab-data:/workspace:Z       # :Z = private label (isolated)
+# Volume=%h/instructlab-data/.cache:/root/.cache:Z
+
 
 # --- Persisted workspace (must match your data dir on host) ---
 Volume=%h/instructlab-data:/workspace
