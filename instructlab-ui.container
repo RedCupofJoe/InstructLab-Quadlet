@@ -60,6 +60,8 @@ Command=/bin/bash -lc "\
 
 [Service]
 TimeoutStopSec=30
+# Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
+ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
 
 [Install]
 WantedBy=default.target
