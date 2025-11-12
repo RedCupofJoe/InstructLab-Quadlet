@@ -233,6 +233,34 @@ exit
 ```
 
 ---
+### D. NVidia drivers in Podman
+Install Nvidia Container Toolkit: Using nividia sources
+```bash
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+  sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+sudo dnf install -y nvidia-container-toolkit
+```
+Setting up Nvidia for Podman: Setup and use the CDI
+
+```bash
+nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+nvidia-ctk cdi list
+# Test it
+podman run --rm --device nvidia.com/gpu=all --security-opt=label=disable fedora:latest nvidia-smi
+```
+NVidia and SELINUX: 
+SELinux will block users containers form using devices by default so it should enabled
+```
+sudo setsebool -P container_use_devices=true
+
+```
+
+Post Nvidia GPU Update: After the Nvidia driver is updated, you must recreate the CDI
+
+```
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+```
+
 
 ## Directory Summary
 
