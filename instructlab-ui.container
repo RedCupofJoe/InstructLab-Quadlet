@@ -18,7 +18,6 @@ Image=ghcr.io/instructlab/instructlab:latest
 
 # --- Name/Lifecycle ---
 ContainerName=instructlab-ui
-Restart=always
 
 # --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
 Environment=NVIDIA_VISIBLE_DEVICES=all
@@ -80,6 +79,9 @@ Command=/bin/bash -lc "\
     --ServerApp.port=8888 \
     --ServerApp.open_browser=False \
 "
+
+[Service]
+Restart=always
 
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
