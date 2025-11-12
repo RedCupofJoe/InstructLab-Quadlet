@@ -1,4 +1,4 @@
-# InstructLab-Quadlet 🚀  
+# InstructLab-Quadlet  
 Rootless, GPU-enabled Quadlet stack for AI development with InstructLab, SDG Hub, and interactive UIs
 
 ---
@@ -19,7 +19,7 @@ Each is deployed with its corresponding `deploy_*.sh` script.
 
 ---
 
-## 🧱 Requirements
+## Requirements
 
 | Component | Minimum Version | Notes |
 |------------|-----------------|-------|
@@ -39,7 +39,7 @@ If the second command shows no NVIDIA devices, install or repair the **NVIDIA Co
 
 ---
 
-## ⚙️ Deployment
+## Deployment
 
 Each deploy script:
 1. Copies the Quadlet into `~/.config/containers/systemd/`
@@ -81,7 +81,7 @@ All containers mount this path as `/workspace`.
 
 ---
 
-## 🔍 Verifying Services
+## Verifying Services
 
 List running containers:
 ```bash
@@ -103,7 +103,7 @@ systemctl --user stop instructlab-gpu.service
 
 ---
 
-## 🧰 Troubleshooting Guide
+## Troubleshooting Guide
 
 ### 1. NVIDIA GPU Not Detected in Container
 **Symptoms:**
@@ -234,7 +234,7 @@ exit
 
 ---
 
-## 🧩 Directory Summary
+## Directory Summary
 
 ```
 InstructLab-Quadlet/
@@ -249,7 +249,7 @@ InstructLab-Quadlet/
 
 ---
 
-## 🧠 Notes & Best Practices
+## Notes & Best Practices
 
 - Always use **rootless Podman** unless a system-wide service is required.  
 - Maintain consistent `Volume=` paths across Quadlets for shared workspace.
@@ -261,7 +261,7 @@ InstructLab-Quadlet/
 
 ---
 
-## 🧩 References
+## References
 
 - **InstructLab**: [github.com/instructlab/instructlab](https://github.com/instructlab/instructlab)  
 - **SDG Hub**: [github.com/Red-Hat-AI-Innovation-Team/sdg_hub](https://github.com/Red-Hat-AI-Innovation-Team/sdg_hub)  
