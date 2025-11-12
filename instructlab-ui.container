@@ -3,7 +3,7 @@
 # Notes:
 #   - Shares the same persistent host directory (~/instructlab-data by default) as the GPU service.
 #   - Installs JupyterLab + InstructLab at container start (simple, flexible).
-#   - Binds JupyterLab to 0.0.0.0:8888, published to host 127.0.0.1:8888 by default (adjust below).
+#   - Binds JupyterLab to 0.0.0.0:8888, published to host 127.0.0.1:8777 by default (adjust below).
 #   - If you prefer Gradio/FastAPI instead, swap the Command to your launcher and change ports.
 
 [Unit]
@@ -34,7 +34,7 @@ Volume=%h/instructlab-data/.cache:/root/.cache
 
 # --- Networking: expose UI on localhost:8888 ---
 # Bind only to loopback on host by default for safety. Remove 127.0.0.1 if you want LAN access.
-PublishPort=127.0.0.1:8888:8888/tcp
+PublishPort=127.0.0.1:8777:8888/tcp
 
 # --- Working directory for notebooks/repos ---
 WorkingDir=/workspace
