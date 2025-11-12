@@ -1,6 +1,6 @@
 # sdg-hub-ui.container
 # Purpose: Run SDG Hub with a simple UI (JupyterLab) sharing the same persistent host path.
-# Image:   NVIDIA CUDA 12.6 + cuDNN on UBI9 (matches your other GPU units)
+# Image:   NVIDIA CUDA 12.6 + cuDNN on UBI9 (matches the other GPU units)
 # PV:      Binds ~/instructlab-data -> /workspace  (shared with your other quadlets)
 
 [Unit]
