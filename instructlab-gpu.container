@@ -18,8 +18,8 @@ Image=ghcr.io/instructlab/instructlab:latest
 # --- Naming and lifecycle ---
 # A stable container name helps with 'podman exec' and logs
 ContainerName=instructlab-gpu
-# Always restart to survive crashes; systemd handles backoff
-Restart=always
+
+
 
 # --- GPU / NVIDIA integration ---
 # These env vars are consumed by the NVIDIA OCI hook (provided by nvidia-container-toolkit)
@@ -83,6 +83,10 @@ TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
 Exec=/bin/sh -lc 'echo "InstructLab GPU container is up" && sleep infinity' # Just Added 
+
+[Service]
+# Always restart to survive crashes; systemd handles backoff
+Restart=always
 
 [Install]
 # For rootless: enables on user login; for rootful: enables at system boot
