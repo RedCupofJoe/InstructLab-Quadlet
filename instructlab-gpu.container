@@ -12,7 +12,7 @@ Wants=network-online.target
 
 [Container]
 # --- Image selection ---
-# We pull the NVidia CUDA/cuDNN UBI9 runtime image:
+# Pull the NVidia CUDA/cuDNN UBI9 runtime image:
 Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
 
 # --- Naming and lifecycle ---
@@ -28,9 +28,28 @@ Restart=always
 # Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility  #Legacy settings
 AddDevice=nvidia.com/gpu=all
 
-# If you use SELinux (Fedora/RHEL), containers can be confined. We disable the label to ease GPU device access.
-# If you prefer to keep SELinux enabled, you can instead add :z or :Z on bind mounts and configure nvidia hooks accordingly.
+# -----------------------------
+# SELinux options (Fedora/RHEL)
+# -----------------------------
+# Option A) Relaxed SELinux (default)
+# - Simplest for GPU/CDI: disables the container SELinux label so /dev/nvidia* devices
+#   and bind mounts work without extra labeling.
 SecurityLabelDisable=true
+
+# Option B) Strict SELinux (keep confinement)  <-- RECOMMENDED if you want strict policy
+# - Comment OUT SecurityLabelDisable=true above
+# - Add :z (shared) or :Z (private) to your bind mounts below
+# - Ensure the host path is labeled and device use is allowed
+#
+#   Host prep (one-time):
+#     sudo setsebool -P container_use_devices=true
+#     sudo chcon -Rt container_file_t ~/instructlab-data
+#
+#   Volume lines with SELinux labels (uncomment one style):
+# Volume=%h/instructlab-data:/workspace:z       # :z = shared label (multiple containers)
+# Volume=%h/instructlab-data/.cache:/root/.cache:z
+# Volume=%h/instructlab-data:/workspace:Z       # :Z = private label (isolated)
+# Volume=%h/instructlab-data/.cache:/root/.cache:Z
 
 # --- Workdir & persistence ---
 # Choose a host path to persist data. For rootless, the deploy script defaults to:  ~/instructlab-data
