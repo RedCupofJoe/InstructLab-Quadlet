@@ -1,0 +1,47 @@
+# instructlab-gpu.container (fixed)
+# Purpose: Run an InstructLab-ready GPU container
+# Notes: Move Service-specific keys to [Service]; keep a single Command; fix typos.
+
+[Unit]
+Description=InstructLab (GPU) - CUDA 12.6 cuDNN UBI9
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=ghcr.io/instructlab/instructlab:latest
+
+# Stable name for exec/logs
+ContainerName=instructlab-gpu
+Restart=always
+
+# NVIDIA CDI (requires nvidia-container-toolkit + CDI or hooks)
+Environment=NVIDIA_VISIBLE_DEVICES=all
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+AddDevice=nvidia.com/gpu=all
+
+# SELinux: simplest is disabling the container label; uncomment volumes with :z if you keep SELinux confinement.
+SecurityLabelDisable=true
+# Volume=%h/instructlab-data:/workspace:z
+# Volume=%h/instructlab-data/.cache:/root/.cache:z
+
+# Persistence
+Volume=%h/instructlab-data:/workspace
+Volume=%h/instructlab-data/.cache:/root/.cache
+
+# Working dir
+WorkingDir=/workspace
+
+# Keep the container up; swap for your launcher when ready
+Command=/bin/bash -lc "echo 'InstructLab GPU container is up'; sleep infinity"
+
+# Ports (uncomment if you expose a service later)
+# PublishPort=8080:8080/tcp
+
+[Service]
+# Give it time to stop cleanly
+TimeoutStopSec=30
+# Ensure nvidia-uvm node exists before container starts
+ExecStartPre=/usr/bin/bash -lc 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
+
+[Install]
+WantedBy=default.target
