@@ -55,10 +55,10 @@ SecurityLabelDisable=true
 # Choose a host path to persist data. For rootless, the deploy script defaults to:  ~/instructlab-data
 # This bind mount is your "project root" inside the container.
 # Add :z on SELinux hosts to label the path for container sharing (the deploy script will do this automatically).
-Volume=%h/instructlab-data:/workspace
+Volume=%h/instructlab-data:/workspace:z
 
 # Cache directory to persist pip/wheels/model caches across restarts (optional but recommended).
-Volume=%h/instructlab-data/.cache:/root/.cache
+Volume=%h/instructlab-data/.cache:/root/.cache:z
 
 # --- Networking ---
 # Uncomment and adjust if you plan to expose any InstructLab service/ports later. This should be changed to a none standard port at somepoint in the future. 
@@ -87,6 +87,7 @@ Exec=/bin/sh -lc 'echo "InstructLab GPU container is up" && sleep infinity' # Ju
 [Service]
 # Always restart to survive crashes; systemd handles backoff
 Restart=always
+TimeoutStopSec=60
 
 [Install]
 # For rootless: enables on user login; for rootful: enables at system boot
