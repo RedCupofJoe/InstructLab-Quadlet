@@ -10,7 +10,7 @@ Wants=network-online.target
 Image=ghcr.io/instructlab/instructlab:latest
 
 ContainerName=instructlab-ui
-Restart=always
+
 
 # Optional GPU access for notebooks
 Environment=NVIDIA_VISIBLE_DEVICES=all
@@ -41,6 +41,7 @@ Command=/bin/bash -lc "  dnf -y install python3.11 python3.11-pip git &&   pytho
 [Service]
 TimeoutStopSec=30
 ExecStartPre=/usr/bin/bash -lc 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
+Restart=always
 
 [Install]
 WantedBy=default.target
