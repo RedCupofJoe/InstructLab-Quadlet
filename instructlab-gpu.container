@@ -13,7 +13,7 @@ Wants=network-online.target
 [Container]
 # --- Image selection ---
 # Pull the NVidia CUDA/cuDNN UBI9 runtime image:
-Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+Image=ghcr.io/instructlab/instructlab:latest
 
 # --- Naming and lifecycle ---
 # A stable container name helps with 'podman exec' and logs
@@ -24,8 +24,8 @@ Restart=always
 # --- GPU / NVIDIA integration ---
 # These env vars are consumed by the NVIDIA OCI hook (provided by nvidia-container-toolkit)
 # to inject the right libraries/devices. Make sure the toolkit is installed on the host.
-# Environment=NVIDIA_VISIBLE_DEVICES=all #Legacy settings 
-# Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility  #Legacy settings
+Environment=NVIDIA_VISIBLE_DEVICES=all #Legacy settings 
+Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility  #Legacy settings
 AddDevice=nvidia.com/gpu=all
 
 # -----------------------------
@@ -78,11 +78,12 @@ Command=/bin/bash -lc "sleep infinity"
 # and 'podman logs instructlab-gpu'.
 # (Quadlet defaults are fine—no extra stanza needed.)
 
-[Service]
+# [Service]
 # Give the container a little time to stop gracefully on shutdown/reload
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
+Exec=/bin/sh -lc 'echo "InstructLab GPU container is up" && sleep infinity' # Just Added 
 
 [Install]
 # For rootless: enables on user login; for rootful: enables at system boot
