@@ -67,7 +67,7 @@ Environment=JUPYTER_NOTEBOOK_DIR=/workspace
 
 # --- Command: install minimal tools then launch JupyterLab ---
 # You can pin versions or pre-bake a custom image later; this keeps it simple for now.
-Command=/bin/bash -lc "\
+Exec=/bin/bash -lc "\
   dnf -y install python3.11 python3.11-pip git && \
   python3.11 -m pip install --upgrade pip && \
   python3.11 -m pip install jupyterlab instructlab && \
@@ -82,7 +82,6 @@ Command=/bin/bash -lc "\
 
 [Service]
 Restart=always
-
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
