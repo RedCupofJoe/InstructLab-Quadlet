@@ -10,7 +10,7 @@ Wants=network-online.target
 
 [Container]
 # --- Base image consistent with your stack ---
-Image=docker.io/nvidia/cuda:12.6.0-cudnn-runtime-ubi9
+Image=docker.io/redhat/ubi9:latest
 
 # --- Naming & restart policy ---
 ContainerName=sdg-hub-ui
