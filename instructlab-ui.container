@@ -7,7 +7,7 @@
 #   - If you prefer Gradio/FastAPI instead, swap the Command to your launcher and change ports.
 
 [Unit]
-Description=InstructLab UI (JupyterLab) - CUDA 12.6 cuDNN UBI9
+Description=InstructLab UI (JupyterLab)
 After=network-online.target
 Wants=network-online.target
 
