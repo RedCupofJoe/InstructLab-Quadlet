@@ -87,6 +87,7 @@ Exec=/bin/sh -lc 'echo "InstructLab GPU container is up" && sleep infinity' # Ju
 [Service]
 # Always restart to survive crashes; systemd handles backoff
 Restart=always
+TimeoutStartSec=600
 TimeoutStopSec=60
 
 [Install]
