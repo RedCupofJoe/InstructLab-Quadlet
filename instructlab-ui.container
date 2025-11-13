@@ -13,7 +13,7 @@ Wants=network-online.target
 
 [Container]
 # --- Base image (matches your GPU runtime) ---
-Image=ghcr.io/instructlab/instructlab:latest
+Image=redhat/instructlab:latest
 
 
 # --- Name/Lifecycle ---
