@@ -71,7 +71,7 @@ WorkingDir=/workspace
 # --- Entry command ---
 # Keep the container "up" so you can exec into it anytime (you can swap this for a launcher script later).
 # Using bash -lc allows profile scripts/conda etc. if you add them later.
-Command=/bin/bash -lc "sleep infinity"
+Exec=/bin/bash -lc "sleep infinity"
 
 # --- Logging ---
 # Keep logs accessible via 'journalctl --user -u instructlab-gpu.service' (rootless)
