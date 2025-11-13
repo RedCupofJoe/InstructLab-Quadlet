@@ -260,7 +260,10 @@ Post Nvidia GPU Update: After the Nvidia driver is updated, you must recreate th
 ```
 sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 ```
+## Dashboard Scripts
+Move this file from you repo to your host:
 
+~/instructlab-data/sdg_dashboard.py
 
 ## Directory Summary
 
