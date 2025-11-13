@@ -28,9 +28,9 @@ UserNS=keep-id
 User=1000:1000
 
 # --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
-Environment=NVIDIA_VISIBLE_DEVICES=all
-Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
-AddDevice=nvidia.com/gpu=all
+# Environment=NVIDIA_VISIBLE_DEVICES=all
+# Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
+# AddDevice=nvidia.com/gpu=all
 
 # -----------------------------
 # SELinux options (Fedora/RHEL)
