@@ -89,6 +89,7 @@ Exec=/bin/bash -lc "\
 
 [Service]
 Restart=always
+TimeoutStartSec=600
 TimeoutStopSec=30
 # Ensures NVIDIA kernel modules create /dev/nvidia-uvm before container start
 ExecStartPre=/bin/bash -c 'while true; do /usr/bin/nvidia-smi -L && exit 0; sleep 1; done'
