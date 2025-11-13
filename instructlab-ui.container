@@ -19,6 +19,14 @@ Image=redhat/instructlab:latest
 # --- Name/Lifecycle ---
 ContainerName=instructlab-ui
 
+# --------------------------------------------------------------
+# User + filesystem mappings
+# --------------------------------------------------------------
+# Run the container processes as the same UID/GID as the host user.
+# This avoids root in the container and keeps file ownership sane.
+UserNS=keep-id
+User=1000:1000
+
 # --- GPU enablement (optional here; useful if you run GPU notebooks/tests) ---
 Environment=NVIDIA_VISIBLE_DEVICES=all
 Environment=NVIDIA_DRIVER_CAPABILITIES=compute,utility
@@ -47,10 +55,9 @@ SecurityLabelDisable=true
 # Volume=%h/instructlab-data:/workspace:Z       # :Z = private label (isolated)
 # Volume=%h/instructlab-data/.cache:/root/.cache:Z
 
-
 # --- Persisted workspace (must match your data dir on host) ---
-Volume=%h/instructlab-data:/workspace
-Volume=%h/instructlab-data/.cache:/root/.cache
+Volume=%h/instructlab-data:/workspace:z
+Volume=%h/instructlab-data/.cache:/root/.cache:z
 
 # --- Networking: expose UI on localhost:8888 ---
 # Bind only to loopback on host by default for safety. Remove 127.0.0.1 if you want LAN access.
