@@ -59,10 +59,10 @@ WorkingDir=/workspace
 Environment=JUPYTER_TOKEN=sdg
 Environment=JUPYTER_NOTEBOOK_DIR=/workspace
 
-# --- Command: install minimal deps, SDG Hub, and run JupyterLab ---
+# --- Execute: install minimal deps, SDG Hub, and run JupyterLab ---
 # SDG Hub install ref: README / PyPI (uv/pip install sdg-hub) 
 # We keep it simple here with python+pip; swap to uv if you prefer.
-Command=/bin/bash -lc "\
+Exec=/bin/bash -lc "\
   dnf -y install python3.11 python3.11-pip git && \
   python3.11 -m pip install --upgrade pip && \
   python3.11 -m pip install jupyterlab sdg-hub && \
