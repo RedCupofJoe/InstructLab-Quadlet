@@ -13,7 +13,7 @@ Wants=network-online.target
 [Container]
 # --- Image selection ---
 # Pull the recommended Instructlab image
-Image=ghcr.io/instructlab/instructlab:latest
+Image=redhat/instructlab:latest
 
 # --- Naming and lifecycle ---
 # A stable container name helps with 'podman exec' and logs
