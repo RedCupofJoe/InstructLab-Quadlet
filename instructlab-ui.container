@@ -15,6 +15,11 @@ Wants=network-online.target
 # --- Base image (matches your GPU runtime) ---
 Image=docker.io/redhat/instructlab:latest
 
+# Keep the container around after exit so we can inspect it with `podman ps -a` and `podman logs`
+Remove=false
+
+# Send container stdout/stderr into journald so `journalctl` shows Jupyter/pip/dnf errors
+LogDriver=journald
 
 # --- Name/Lifecycle ---
 ContainerName=instructlab-ui
