@@ -75,12 +75,34 @@ Environment=JUPYTER_NOTEBOOK_DIR=/workspace
 # --- Command: install minimal tools then launch JupyterLab ---
 # You can pin versions or pre-bake a custom image later; this keeps it simple for now.
 Exec=/bin/bash -lc "\
-  dnf -y install python3.11 python3.11-pip git && \
-  python3.11 -m pip install --upgrade pip && \
-  python3.11 -m pip install jupyterlab instructlab && \
+  set -euo pipefail; \
+  # --------------------------------------------------------; \
+  # 1) Pick a Python interpreter available in the image     ; \
+  # --------------------------------------------------------; \
+  if command -v python3 >/dev/null 2>&1; then \
+    PY=python3; \
+  elif command -v python >/dev/null 2>&1; then \
+    PY=python; \
+  else \
+    echo "ERROR: No python or python3 interpreter found in container image." >&2; \
+    exit 1; \
+  fi; \
+  echo "Using Python interpreter: $PY"; \
+  # --------------------------------------------------------; \
+  # 2) Upgrade pip and install Jupyter + InstructLab + SDG  ; \
+  #    (you can drop sdg-hub if you don’t need it here)     ; \
+  # --------------------------------------------------------; \
+  $PY -m pip install --upgrade pip; \
+  $PY -m pip install jupyterlab instructlab sdg-hub; \
+  # --------------------------------------------------------; \
+  # 3) Launch JupyterLab bound to 0.0.0.0:8888              ; \
+  #    Token + notebook dir come from env vars set in       ; \
+  #    the [Container] section (JUPYTER_TOKEN,              ; \
+  #    JUPYTER_NOTEBOOK_DIR).                               ; \
+  # --------------------------------------------------------; \
   jupyter lab \
-    --ServerApp.token=${JUPYTER_TOKEN} \
-    --ServerApp.root_dir=${JUPYTER_NOTEBOOK_DIR} \
+    --ServerApp.token=$JUPYTER_TOKEN \
+    --ServerApp.root_dir=$JUPYTER_NOTEBOOK_DIR \
     --ServerApp.allow_remote_access=1 \
     --ServerApp.ip=0.0.0.0 \
     --ServerApp.port=8888 \
